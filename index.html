@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>עלות למשימה מול ציון — Artificial Analysis Intelligence Index v5</title>
+<meta name="description" content="תרשים השוואתי אינטראקטיבי: עלות ממוצעת למשימה מול מדד אינטליגנציה למודלי בינה מלאכותית (Artificial Analysis Intelligence Index v5.0)">
+<meta property="og:title" content="עלות למשימה מול ציון — AI Intelligence Index v5">
+<meta property="og:description" content="תרשים אינטראקטיבי של עלות מול ביצועים למודלי שפה לפי רמות חשיבה שונות">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+<style>
+  :root { --bg:#0f1115; --card:#171a21; --text:#e8eaf0; --muted:#8b93a7; --grid:#2a2f3a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family: system-ui, "Segoe UI", Arial, sans-serif; padding:24px 16px; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; line-height: 1.6; }
+  .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .picker { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 14px; font-size: 13px; }
+  .picker label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 4px 8px; border: 1px solid var(--grid); border-radius: 8px; }
+  .chart-box { position: relative; height: 520px; }
+  @media (max-width: 600px) { .chart-box { height: 420px; } }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--grid); text-align: center; }
+  th { color: var(--muted); font-weight: 600; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-left: 6px; vertical-align: middle; }
+  .est { color: #f43f5e; }
+  .notes { color: var(--muted); font-size: 13px; line-height: 1.8; }
+  .notes b { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>עלות למשימה מול ציון — Artificial Analysis Intelligence Index v5.0</h1>
+  <p class="sub">כל הערכים לגרסה 5.0 (פורסמה ב-27 באוקטובר 2026). נקודות מוצקות = נמדדו ב-v5. נקודות ריקות = משוערות. X = עלות ממוצעת למשימה (דולר, לוגריתמי) · Y = ציון · כל קו = מודל · כל נקודה = רמת חשיבה</p>
+
+  <div class="card">
+    <div class="picker" id="picker"></div>
+    <div class="chart-box"><canvas id="chart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>מודל</th><th>רמת חשיבה</th><th>ציון</th><th>עלות למשימה</th><th>סטטוס</th><th>מקור / שיטה</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="notes">
+    <b>מה נמדד ב-v5.0 (AA):</b> Claude Opus 5.5 ב-low (35, $0.98) וב-max (58, $10.04). GPT-6 Astra ב-medium (51, $2.73) וב-max (57, $6.24). GPT-6.1 Sol ב-max (55, $1.27). GPT-6.1 Terra ב-max (51, $0.96). Gemini 4 Argon ב-high (50, $7.68). Gemini 4 Carbon ב-high (59, $7.76). Claude Fable 5.1 ב-max עלות בלבד ($13.04). Gemini 4 Carbon ב-medium עלות בלבד ($6.59).<br>
+    <b>מה משוער:</b> כל שאר הנקודות. Sonnet 5.5 ו-Haiku 5.5 לא נמדדו בגרסה 5.0 במקורות שמצאתי: הערכים מחושבים מהגרסה 4.3.2, עם עלות max מוכפלת ב-1.8 (הממוצע של היחס בין הגרסאות במודלים שנמדדו בשתיהן). Fable 5.1 ציון max משוער 55.5 (53 בגרסה 4.3 + 2.5). Opus 5.5 ברמות medium, high ו-xhigh: ציון ביניים בין low ל-max, עלות לפי יחס הגרסה 4.3.2. Astra, Sol, Terra ו-Argon: יחסי רמות לפי Fable 5.1 או לפי Opus, כמפורט בטבלה.<br>
+    <b>אמינות:</b> נמוכה. בגרסה 4.3.2 היחס בין הציונים של Opus 5.5 ל-low ל-max השתנה בין הגרסאות (42 מול 35 ב-low), ולכן ההערכות של רמות הביניים עשויות להיות שגויות בכמה נקודות. הערכות של Argon ו-Carbon ברמות xhigh ו-max מאוד לא ודאיות: הן מניחות יחסי עלות שאינם מאומתים לדגמים האלה, והתוצאה (למשל כ-$25 ל-Carbon max) חריגה.<br>
+    <b>מודלים שנוספו (הכול משוער):</b> GPT-5.6 Terra, GPT-5.6 Luna, GPT-5.6 Sol, GPT-6 Sol, Claude Fable 5, Claude Opus 5 ו-GLM-5.3-Flash. לכל אחד יש ציון max ועלות max מגרסה 4.3 או 4.3.2 (או מחושבת מ-v4.1.1 עם הכפלה 2.03), ולשאר הרמות יחסי Fable 5.1. ציון max ב-v5 הוא הציון הקודם + 2.5 (הממוצע שנמדד בין הגרסאות), חוץ מ-Opus 5 (+0, כמו Opus 5.5). עלות max ב-v5 הוכפלה ב-1.8 (1.71 ל-Fable, 1.68 ל-Opus 5).<br>
+    <b>Fable 5.2 (שוחרר היום, 9 בנובמבר):</b> אין עדיין מדידה ב-AA v5. ההערכה: עלות max = עלות Fable 5.1 ב-v5 ($13.04) כפול 0.8, לפי הוזלת המחיר של 20% (הנחה שלא השתנה מספר הטוקנים, שלא פורסם). ציון max = 58.5, כלומר Opus 5.5 (58) + 0.5, לפי הטענה של Anthropic ושל סוקרים ראשונים שהמודל עולה על Opus 5.5 ברוב המבחנים. שאר הרמות לפי יחסי Fable 5.1. זו הערכה מאוד גסה.<br>
+    <b>לא נוספו, כי אין בסיס להערכה:</b> Muse Spark 1.3 ו-Kimi K3 (יש ציון בלי עלות), Grok 4.6 (אין גרסה ברורה), ו-Gemini 3.8 Flash (הנתון מ-snapshot לא מאומת).<br>
+    <b>השוואה לגרסאות קודמות:</b> בגרסה 4.3.2 Opus 5.5 ב-max עלה $5.98, ובגרסה 5.0 $10.04 לאותו ציון 58. לכן הגרף הזה לא ניתן לשילוב עם הגרף הקודם.
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script>
+  // Artificial Analysis Intelligence Index v5.0 (מדידות ומשוערות, מסומן לכל נקודה)
+  var MODELS = [
+  { model:'Claude Opus 5.5', color:'#a855f7', def:true, points:[
+        {effort:'low',cost:0.9800,score:35.00,measured:true,kind:'measured',src:'v5 (AA)'},
+        {effort:'medium',cost:2.2500,score:47.90,measured:false,kind:'estimated',src:'v4.3.2 pattern'},
+        {effort:'high',cost:3.0560,score:52.20,measured:false,kind:'estimated',src:'v4.3.2 pattern'},
+        {effort:'xhigh',cost:5.8090,score:55.10,measured:false,kind:'estimated',src:'v4.3.2 pattern'},
+        {effort:'max',cost:10.0400,score:58.00,measured:true,kind:'measured',src:'v5 (AA)'} ] },
+  { model:'Claude Sonnet 5.5', color:'#3b82f6', def:true, points:[
+        {effort:'low',cost:0.6300,score:36.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'medium',cost:0.8640,score:41.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'high',cost:1.5840,score:47.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'xhigh',cost:3.6180,score:52.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'max',cost:9.8280,score:56.00,measured:false,kind:'estimated',src:'v4.3.2 max x1.8 cost'} ] },
+  { model:'Claude Haiku 5.5', color:'#22c55e', def:true, points:[
+        {effort:'low',cost:0.0360,score:29.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'medium',cost:0.0900,score:34.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'high',cost:0.1440,score:38.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'xhigh',cost:0.2160,score:41.00,measured:false,kind:'estimated',src:'v4.3.2 pattern x1.8 cost'},
+        {effort:'max',cost:0.3780,score:43.00,measured:false,kind:'estimated',src:'v4.3.2 max x1.8 cost'} ] },
+  { model:'Claude Fable 5.1', color:'#f43f5e', def:true, points:[
+        {effort:'low',cost:2.6700,score:48.80,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'medium',cost:2.8440,score:50.50,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'high',cost:4.3000,score:52.10,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'xhigh',cost:9.4330,score:54.70,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'max',cost:13.0400,score:55.50,measured:true,kind:'measured cost, estimated score',src:'v5 cost (AA)'} ] },
+  { model:'GPT-6 Astra', color:'#eab308', def:false, points:[
+        {effort:'low',cost:1.2780,score:49.30,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'medium',cost:2.7300,score:51.00,measured:true,kind:'measured',src:'v5 (AA, מקור משני)'},
+        {effort:'high',cost:3.5100,score:52.70,measured:false,kind:'estimated',src:'עמעום בין medium ל-xhigh'},
+        {effort:'xhigh',cost:4.5140,score:55.30,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'max',cost:6.2400,score:57.00,measured:true,kind:'measured',src:'v5 (AA)'} ] },
+  { model:'GPT-6.1 Sol', color:'#f97316', def:false, points:[
+        {effort:'low',cost:0.2600,score:48.30,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'medium',cost:0.2770,score:50.00,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'high',cost:0.4190,score:51.70,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'xhigh',cost:0.9190,score:54.20,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'max',cost:1.2700,score:55.00,measured:true,kind:'measured',src:'v5 (AA)'} ] },
+  { model:'GPT-6.1 Terra', color:'#84cc16', def:false, points:[
+        {effort:'low',cost:0.1970,score:44.80,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'medium',cost:0.2090,score:46.40,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'high',cost:0.3170,score:47.90,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'xhigh',cost:0.6940,score:50.20,measured:false,kind:'estimated',src:'v4.1.1 pattern'},
+        {effort:'max',cost:0.9600,score:51.00,measured:true,kind:'measured',src:'v5 (AA)'} ] },
+  { model:'Gemini 4 Argon', color:'#06b6d4', def:false, points:[
+        {effort:'low',cost:2.3210,score:46.80,measured:false,kind:'estimated',src:'Opus v4.3.2 cost ratio, Fable score pattern'},
+        {effort:'medium',cost:5.6550,score:48.40,measured:false,kind:'estimated',src:'Opus v4.3.2 cost ratio, Fable score pattern'},
+        {effort:'high',cost:7.6800,score:50.00,measured:true,kind:'measured',src:'v5 (AA, מקור משני)'},
+        {effort:'xhigh',cost:14.6000,score:52.40,measured:false,kind:'estimated',src:'Opus v4.3.2 cost ratio, Fable score pattern'},
+        {effort:'max',cost:25.2340,score:53.20,measured:false,kind:'estimated',src:'Opus v4.3.2 cost ratio, Fable score pattern'} ] },
+  { model:'Gemini 4 Carbon', color:'#f43f5e', def:false, points:[
+        {effort:'low',cost:2.3450,score:55.20,measured:false,kind:'estimated',src:'Opus cost ratio, Fable score pattern'},
+        {effort:'medium',cost:6.5900,score:56.00,measured:true,kind:'measured cost, estimated score',src:'v5 cost (AA)'},
+        {effort:'high',cost:7.7600,score:59.00,measured:true,kind:'measured',src:'v5 (AA)'},
+        {effort:'xhigh',cost:14.7530,score:61.90,measured:false,kind:'estimated',src:'Opus cost ratio, Fable score pattern'},
+        {effort:'max',cost:25.4970,score:62.80,measured:false,kind:'estimated',src:'Opus cost ratio, Fable score pattern'} ] },
+  { model:'GPT-5.6 Terra', color:'#65a30d', def:false, points:[
+        {effort:'low',cost:0.5160,score:39.10,measured:false,kind:'estimated',src:'v4.3: max 42, $1.40 → v5 est.'},
+        {effort:'medium',cost:0.5500,score:40.50,measured:false,kind:'estimated',src:'v4.3: max 42, $1.40 → v5 est.'},
+        {effort:'high',cost:0.8310,score:41.80,measured:false,kind:'estimated',src:'v4.3: max 42, $1.40 → v5 est.'},
+        {effort:'xhigh',cost:1.8230,score:43.80,measured:false,kind:'estimated',src:'v4.3: max 42, $1.40 → v5 est.'},
+        {effort:'max',cost:2.5200,score:44.50,measured:false,kind:'estimated',src:'v4.3: max 42, $1.40 → v5 est.'} ] },
+  { model:'GPT-5.6 Luna', color:'#0d9488', def:false, points:[
+        {effort:'low',cost:0.0660,score:35.60,measured:false,kind:'estimated',src:'v4.3: max 38, $0.18 → v5 est.'},
+        {effort:'medium',cost:0.0700,score:36.80,measured:false,kind:'estimated',src:'v4.3: max 38, $0.18 → v5 est.'},
+        {effort:'high',cost:0.1060,score:38.00,measured:false,kind:'estimated',src:'v4.3: max 38, $0.18 → v5 est.'},
+        {effort:'xhigh',cost:0.2310,score:39.90,measured:false,kind:'estimated',src:'v4.3: max 38, $0.18 → v5 est.'},
+        {effort:'max',cost:0.3200,score:40.50,measured:false,kind:'estimated',src:'v4.3: max 38, $0.18 → v5 est.'} ] },
+  { model:'GPT-5.6 Sol', color:'#ea580c', def:false, points:[
+        {effort:'low',cost:0.7110,score:43.50,measured:false,kind:'estimated',src:'v4.3: max 47; cost = v4.1.1 $0.95 x 2.03 → v5 est.'},
+        {effort:'medium',cost:0.7570,score:45.00,measured:false,kind:'estimated',src:'v4.3: max 47; cost = v4.1.1 $0.95 x 2.03 → v5 est.'},
+        {effort:'high',cost:1.1440,score:46.50,measured:false,kind:'estimated',src:'v4.3: max 47; cost = v4.1.1 $0.95 x 2.03 → v5 est.'},
+        {effort:'xhigh',cost:2.5100,score:48.80,measured:false,kind:'estimated',src:'v4.3: max 47; cost = v4.1.1 $0.95 x 2.03 → v5 est.'},
+        {effort:'max',cost:3.4700,score:49.50,measured:false,kind:'estimated',src:'v4.3: max 47; cost = v4.1.1 $0.95 x 2.03 → v5 est.'} ] },
+  { model:'GPT-6 Sol', color:'#fb923c', def:false, points:[
+        {effort:'low',cost:0.3910,score:44.40,measured:false,kind:'estimated',src:'v4.3.2: max 48, $1.06 → v5 est.'},
+        {effort:'medium',cost:0.4170,score:45.90,measured:false,kind:'estimated',src:'v4.3.2: max 48, $1.06 → v5 est.'},
+        {effort:'high',cost:0.6300,score:47.40,measured:false,kind:'estimated',src:'v4.3.2: max 48, $1.06 → v5 est.'},
+        {effort:'xhigh',cost:1.3820,score:49.70,measured:false,kind:'estimated',src:'v4.3.2: max 48, $1.06 → v5 est.'},
+        {effort:'max',cost:1.9100,score:50.50,measured:false,kind:'estimated',src:'v4.3.2: max 48, $1.06 → v5 est.'} ] },
+  { model:'Claude Fable 5', color:'#fb7185', def:false, points:[
+        {effort:'low',cost:2.2300,score:46.10,measured:false,kind:'estimated',src:'v4.3: max 50; cost = v4.1.1 $3.14 x 2.03 → v5 est.'},
+        {effort:'medium',cost:2.3750,score:47.70,measured:false,kind:'estimated',src:'v4.3: max 50; cost = v4.1.1 $3.14 x 2.03 → v5 est.'},
+        {effort:'high',cost:3.5910,score:49.30,measured:false,kind:'estimated',src:'v4.3: max 50; cost = v4.1.1 $3.14 x 2.03 → v5 est.'},
+        {effort:'xhigh',cost:7.8780,score:51.70,measured:false,kind:'estimated',src:'v4.3: max 50; cost = v4.1.1 $3.14 x 2.03 → v5 est.'},
+        {effort:'max',cost:10.8900,score:52.50,measured:false,kind:'estimated',src:'v4.3: max 50; cost = v4.1.1 $3.14 x 2.03 → v5 est.'} ] },
+  { model:'Claude Opus 5', color:'#c084fc', def:false, points:[
+        {effort:'low',cost:2.0150,score:44.80,measured:false,kind:'estimated',src:'v4.3.2: max 51, $5.86 → v5 est.'},
+        {effort:'medium',cost:2.1460,score:46.40,measured:false,kind:'estimated',src:'v4.3.2: max 51, $5.86 → v5 est.'},
+        {effort:'high',cost:3.2450,score:47.90,measured:false,kind:'estimated',src:'v4.3.2: max 51, $5.86 → v5 est.'},
+        {effort:'xhigh',cost:7.1180,score:50.20,measured:false,kind:'estimated',src:'v4.3.2: max 51, $5.86 → v5 est.'},
+        {effort:'max',cost:9.8400,score:51.00,measured:false,kind:'estimated',src:'v4.3.2: max 51, $5.86 → v5 est.'} ] },
+  { model:'GLM-5.3-Flash', color:'#facc15', def:false, points:[
+        {effort:'low',cost:0.0920,score:39.10,measured:false,kind:'estimated',src:'v4.3: max 42, $0.25 (level not stated in source) → v5 est.'},
+        {effort:'medium',cost:0.0980,score:40.50,measured:false,kind:'estimated',src:'v4.3: max 42, $0.25 (level not stated in source) → v5 est.'},
+        {effort:'high',cost:0.1480,score:41.80,measured:false,kind:'estimated',src:'v4.3: max 42, $0.25 (level not stated in source) → v5 est.'},
+        {effort:'xhigh',cost:0.3260,score:43.80,measured:false,kind:'estimated',src:'v4.3: max 42, $0.25 (level not stated in source) → v5 est.'},
+        {effort:'max',cost:0.4500,score:44.50,measured:false,kind:'estimated',src:'v4.3: max 42, $0.25 (level not stated in source) → v5 est.'} ] },
+  { model:'Claude Fable 5.2', color:'#e11d48', def:true, points:[
+        {effort:'low',cost:2.1360,score:51.40,measured:false,kind:'estimated',src:'Fable 5.2: no AA v5 measurement. cost = Fable 5.1 v5 $13.04 x0.8 (20% price cut); score = Opus 5.5 v5 max 58 + 0.5 → v5 est.'},
+        {effort:'medium',cost:2.2750,score:53.20,measured:false,kind:'estimated',src:'Fable 5.2: no AA v5 measurement. cost = Fable 5.1 v5 $13.04 x0.8 (20% price cut); score = Opus 5.5 v5 max 58 + 0.5 → v5 est.'},
+        {effort:'high',cost:3.4400,score:55.00,measured:false,kind:'estimated',src:'Fable 5.2: no AA v5 measurement. cost = Fable 5.1 v5 $13.04 x0.8 (20% price cut); score = Opus 5.5 v5 max 58 + 0.5 → v5 est.'},
+        {effort:'xhigh',cost:7.5450,score:57.60,measured:false,kind:'estimated',src:'Fable 5.2: no AA v5 measurement. cost = Fable 5.1 v5 $13.04 x0.8 (20% price cut); score = Opus 5.5 v5 max 58 + 0.5 → v5 est.'},
+        {effort:'max',cost:10.4300,score:58.50,measured:false,kind:'estimated',src:'Fable 5.2: no AA v5 measurement. cost = Fable 5.1 v5 $13.04 x0.8 (20% price cut); score = Opus 5.5 v5 max 58 + 0.5 → v5 est.'} ] }
+  ];
+
+  var effortLabels = {
+    id: 'effortLabels',
+    afterDatasetsDraw: function (chart) {
+      var c = chart.ctx;
+      chart.data.datasets.forEach(function (ds, i) {
+        if (!chart.isDatasetVisible(i)) return;
+        var meta = chart.getDatasetMeta(i);
+        c.save();
+        c.font = '12px system-ui, sans-serif';
+        c.fillStyle = ds.borderColor;
+        c.textAlign = 'left';
+        meta.data.forEach(function (el, j) {
+          c.fillText(ds.effortNames[j], el.x + 8, el.y - 8);
+        });
+        c.restore();
+      });
+    }
+  };
+
+  var datasets = MODELS.map(function (m) {
+    return {
+      label: m.model,
+      hidden: !m.def,
+      data: m.points.map(function (p) { return { x: p.cost, y: p.score, effort: p.effort, measured: p.measured }; }),
+      effortNames: m.points.map(function (p) { return p.effort; }),
+      borderColor: m.color, backgroundColor: m.color,
+      pointBackgroundColor: m.points.map(function (p) { return p.measured ? m.color : '#0f1115'; }),
+      pointBorderColor: m.color,
+      showLine: true, borderWidth: 2, pointRadius: 6, pointHoverRadius: 8
+    };
+  });
+
+  var chart = new Chart(document.getElementById('chart'), {
+    type: 'scatter',
+    data: { datasets: datasets },
+    plugins: [effortLabels],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'nearest', intersect: true },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: function (items) { return items[0].dataset.label; },
+            label: function (c) {
+              return c.raw.effort + ' — ציון ' + c.raw.y.toFixed(1) + ' · $' + c.raw.x.toFixed(2) + ' למשימה' + (c.raw.measured ? '' : ' (משוער)');
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'logarithmic',
+          min: 0.02,
+          max: 40,
+          title: { display: true, text: 'עלות ממוצעת למשימה (דולר, לוגריתמי)', color: '#8b93a7' },
+          ticks: {
+            color: '#8b93a7',
+            callback: function (v) {
+              var show = [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20];
+              for (var k = 0; k < show.length; k++) {
+                if (Math.abs(show[k] - v) < 1e-9) return '$' + v;
+              }
+              return '';
+            }
+          },
+          grid: { color: '#2a2f3a' }
+        },
+        y: {
+          min: 20,
+          max: 66,
+          title: { display: true, text: 'ציון Intelligence Index v5.0', color: '#8b93a7' },
+          ticks: { color: '#8b93a7' },
+          grid: { color: '#2a2f3a' }
+        }
+      }
+    }
+  });
+
+  var picker = document.getElementById('picker');
+  MODELS.forEach(function (m, idx) {
+    var lab = document.createElement('label');
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = m.def;
+    cb.addEventListener('change', function () {
+      chart.data.datasets[idx].hidden = !cb.checked;
+      chart.update();
+      renderTable();
+    });
+    var dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = m.color;
+    lab.appendChild(cb);
+    lab.appendChild(dot);
+    lab.appendChild(document.createTextNode(m.model));
+    picker.appendChild(lab);
+  });
+
+  function renderTable() {
+    var rows = [];
+    MODELS.forEach(function (m, idx) {
+      if (chart.data.datasets[idx].hidden) return;
+      m.points.forEach(function (p) {
+        var status = p.measured ? 'נמדד ב-v5' : '<span class="est">משוער</span>';
+        rows.push('<tr><td><span class="dot" style="background:' + m.color + '"></span>' + m.model + '</td><td>' +
+          p.effort + '</td><td>' + (p.measured ? '' : '~') + p.score.toFixed(1) + '</td><td>' +
+          (p.measured ? '' : '~') + '$' + p.cost.toFixed(2) + '</td><td>' + status + '</td><td>' + p.src + '</td></tr>');
+      });
+    });
+    document.getElementById('rows').innerHTML = rows.join('');
+  }
+  renderTable();
+</script>
+</body>
+</html>
